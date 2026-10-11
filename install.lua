@@ -4,7 +4,7 @@
 -- Installs the latest release of this project from GitHub and configures it.
 --
 -- Run it with:
---   wget run https://raw.githubusercontent.com/<user>/<repo_name>/main/installer.lua
+--   wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua
 
 local repo           = "https://github.com/Sirc23/RASCL/"
 local branch         = "main"       -- the branch that holds the releases folder
@@ -210,12 +210,12 @@ local function promptHostname()
 end
 
 local function promptDeviceType()
-	local types = { h = "host", c = "crafter", o = "remote" }
+	local types = { h = "host", c = "crafter", r = "remote" }
 	while true do
-		write("Device type - (h)ost, (c)rafter or rem(o)te: ")
+		write("Device type - (h)ost, (c)rafter or (r)emote: ")
 		local choice = trim(read()):lower()
 		if types[choice] then return types[choice] end
-		printError("Please type h, c or o.")
+		printError("Please type h, c or r.")
 	end
 end
 
