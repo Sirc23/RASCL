@@ -1,5 +1,5 @@
 term.clear()
-version = "1.0.0"
+version = "a1.0.0"
 config = {}
 --Load bootstrap file
 local bootstrapFile = fs.open("/startup/rascl_bootstrap.txt", "r")

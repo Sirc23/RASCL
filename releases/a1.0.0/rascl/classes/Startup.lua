@@ -138,7 +138,7 @@ function Startup:initMainMenu(container)
 		y = container.height,
 		z = 2000,
 		foreground = colors.black,
-		text = "v" .. version,
+		text = version,
 		visible = false,
 		name = "versionLabel"
 	})

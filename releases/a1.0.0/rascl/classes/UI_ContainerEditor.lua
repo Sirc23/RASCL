@@ -59,7 +59,7 @@ function UI_ContainerEditor:initStorageType(container, storageType)
         height = 1,
         x = 2,
         y = 2,
-		z = 20,
+		z = 200,
         background = colors.black,
         foreground = colors.white,
 		dropdownHeight = 7
@@ -208,7 +208,7 @@ function UI_ContainerEditor:initFilter(container)
         height = 1,
         x = 2,
         y = self.ui_allItems.y + 2,
-		z = 999,
+		z = 100,
         background = colors.black,
         foreground = colors.white
     })
