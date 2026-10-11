@@ -202,6 +202,8 @@ local function promptInstallDir()
 			end
 			if dir:sub(-1) == "/" and #dir > 1 then
 				dir = dir:gsub(".$", "")
+			elseif dir == "" then
+				dir = "/"
 			end
 			settings.set("rascl", dir .. "rascl")
 			settings.save()
