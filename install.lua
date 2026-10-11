@@ -209,7 +209,7 @@ local function promptInstallDir()
 				settings.set("rascl", "/rascl")
 				settings.save()
 			else
-				settings.set("rascl", "/rascl")
+				settings.set("rascl", dir .. "/rascl")
 				settings.save()
 			end
 			return dir
