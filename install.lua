@@ -249,7 +249,7 @@ local function main()
 
 	-- 1. Where to install
 	local installDir = promptInstallDir()
-	print("Installing to /" .. installDir)
+	print("Installing to " .. installDir)
 
 	-- 2. Find the latest version
 	print("Looking for the latest version...")
