@@ -39,7 +39,7 @@ function Startup:initializeUI()
 	self.ui_mainMenu = self:initMainMenu(basalt.getMainFrame())
 		
 		self.ui_items = self:initItems(basalt.getMainFrame())
-		self.ui_crafting = self:initCrafting(basalt.getMainFrame())
+		--self.ui_crafting = self:initCrafting(basalt.getMainFrame())
 		self:initContainers(basalt.getMainFrame())
 		self:initFilters(basalt.getMainFrame())
 		self:initConfigEditor(basalt.getMainFrame())
@@ -56,8 +56,8 @@ function Startup:initializeUI()
 		
 	parallel.waitForAll(function() self:defineMods() end)
 	parallel.waitForAll(function() self:defineFilters() end)
-	parallel.waitForAll(function() self:defineTurtles() end)
-	parallel.waitForAll(function() self:defineRecipes() end)
+	--parallel.waitForAll(function() self:defineTurtles() end)
+	--parallel.waitForAll(function() self:defineRecipes() end)
 	parallel.waitForAll(function() self:defineContainers(self.ui_mainMenu) end)
 	
 	
