@@ -187,8 +187,13 @@ end
 ------------------------------------------------------------------------
 
 local function promptInstallDir()
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Step 1: Installation directory")
+	print("Please type the installation directory relative to root")
+	print("(eg. \"foo/bar\" \26 /foo/bar)")
 	while true do
-		write("Install location (blank for the root directory): ")
+		write("> ")
 		local dir = fs.combine("/", trim(read()))
 		if dir == ".." or dir:sub(1, 3) == "../" then
 			printError("That location is outside this computer's file system.")
@@ -200,12 +205,12 @@ local function promptInstallDir()
 			if not settings.get("rascl") then
 				settings.define("rascl", {description = "Base directory for rascl", type = "string", default = "/rascl"})
 			end
+			dir = "/" .. dir
 			if dir:sub(-1) == "/" and #dir > 1 then
 				dir = dir:gsub(".$", "")
-				settings.set("rascl", dir .. "/rascl")
-				settings.save()
-			elseif dir == "" then
-				dir = "/"
+			end
+			
+			if dir == "/" then
 				settings.set("rascl", "/rascl")
 				settings.save()
 			else
@@ -218,8 +223,13 @@ local function promptInstallDir()
 end
 
 local function promptHostname()
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Step 2: Hostname")
+	print("Please type a unique hostname, up to 16 characters")
+	print("Letters, numbers, _, and - are allowed")
 	while true do
-		write("Hostname (letters, numbers, _ and -, up to 16 characters): ")
+		write("> ")
 		local hostname = trim(read())
 		local problem = hostnameProblem(hostname)
 		if not problem then return hostname end
@@ -228,9 +238,14 @@ local function promptHostname()
 end
 
 local function promptDeviceType()
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Step 3: Device Type")
+	print("Please specify the device type")
+	print("(h)ost, (c)rafter or (r)emote")
 	local types = { h = "host", c = "crafter", r = "remote" }
 	while true do
-		write("Device type - (h)ost, (c)rafter or (r)emote: ")
+		write("> ")
 		local choice = trim(read()):lower()
 		if types[choice] then return types[choice] end
 		printError("Please type h, c or r.")
@@ -290,6 +305,8 @@ local function main()
 	end
 
 	local rawBase = ("https://raw.githubusercontent.com/%s/%s/"):format(owner, name)
+	term.clear()
+	term.setCursorPos(1,1)
 	for i, rel in ipairs(files) do
 		print(("[%d/%d] %s"):format(i, #files, rel))
 		local url = rawBase .. encodePath(("%s/%s/%s/%s"):format(branch, releasesFolder, latest.name, rel))
