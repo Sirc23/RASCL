@@ -5,7 +5,10 @@
 --
 -- Run it with:
 --   wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua
+
 term.clear()
+term.setCursorPos(1,1)
+
 local repo           = "https://github.com/Sirc23/RASCL/"
 local branch         = "main"       -- the branch that holds the releases folder
 local releasesFolder = "releases"
