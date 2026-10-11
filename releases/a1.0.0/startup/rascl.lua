@@ -1,13 +1,7 @@
 term.clear()
 version = "a1.0.0"
 config = {}
---Load bootstrap file
-local bootstrapFile = fs.open("/startup/rascl_bootstrap.txt", "r")
-local line = bootstrapFile.readLine()
-if not line then error("Bootstrap file not set") end
-root = line .. "/"
-bootstrapFile.close()
-
+root = settings.get("rascl") .. "/"
 --Load config file
 local configFile = fs.open(root .. "files.txt", "r")
 
