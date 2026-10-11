@@ -198,7 +198,7 @@ local function promptInstallDir()
 			printError("/" .. dir .. " is read-only.")
 		else
 			if not settings.get("rascl") then
-				settings.define("rascl", "Base directory for rascl")
+				settings.define("rascl", {description = "Base directory for rascl", type = "string", default = "/rascl"})
 			end
 			if dir:sub(-1) == "/" and #dir > 1 then
 				dir = dir:gsub(".$", "")
