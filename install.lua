@@ -200,10 +200,10 @@ local function promptInstallDir()
 			if not settings.get("rascl") then
 				settings.define("rascl", "Base directory for rascl")
 			end
-			if dir:sub(-1) == "/" then
+			if dir:sub(-1) == "/" and #dir > 1 then
 				dir = dir:gsub(".$", "")
 			end
-			settings.set("rascl", dir)
+			settings.set("rascl", dir .. "rascl")
 			settings.save()
 			return dir
 		end
