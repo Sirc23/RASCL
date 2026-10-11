@@ -6,7 +6,7 @@
 -- Run it with:
 --   wget run https://raw.githubusercontent.com/<user>/<repo_name>/main/installer.lua
 
-local repo           = "https://github.com/<user>/<repo_name>/"
+local repo           = "https://github.com/Sirc23/RASCL/"
 local branch         = "main"       -- the branch that holds the releases folder
 local releasesFolder = "releases"
 
