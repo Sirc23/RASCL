@@ -93,7 +93,7 @@ function UI_ContainerEditor:initStorageType(container, storageType)
 				text = "ignore",
 				background = colors.black,
 				foreground = colors.white
-			},
+			}--[[,
 			{
 				text = "crafting-input",
 				background = colors.black,
@@ -103,7 +103,7 @@ function UI_ContainerEditor:initStorageType(container, storageType)
 				text = "crafting-output",
 				background = colors.black,
 				foreground = colors.white
-			}
+			}--]]
 		})
 		
 		r.text = storageType
