@@ -11,7 +11,7 @@ RASCL is a storage and auto-crafting solution for the CC: Tweaked mod in Minecra
 - A filter system that limits what items go into which storage containers based on item name, mod, attribute/tag, or a recursive, complex sequence of other filters
 - All features accessible via remote clients that communicate via rednet (this includes pocket computers)
 
-This project could not be possible without [Basalt2](https://github.com/Pyroxenium/Basalt2/tree/main) by NoryiE. This repo contains a pre-installed version of it that is compatible with my work, but please consider supporting the original project.
+This project could not be possible without [Basalt2](https://github.com/Pyroxenium/Basalt2/tree/main) by NyoriE. This repo contains a pre-installed version of it that is compatible with my work, but please consider supporting the original project.
 
 ## Installation
 RASCL relies heavily on touch capabilities, and is intended to be run in terminals rather than on monitors.
