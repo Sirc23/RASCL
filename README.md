@@ -4,8 +4,8 @@ Remotely Accessible Storage, Crafting, and Logistics
 RASCL is a storage and auto-crafting solution for the CC: Tweaked mod in Minecraft. The program is currently a work-in-progress, but it currently features:
 
 - A quick and easy to use interface for searching and requesting items stored across all connected storage containers
-- View contents of each container to check contents without physically visiting it
-- Easily check which containers have a specific item, and how much of it the container has
+- The ability to view contents of each container without physically visiting it
+- Methods for easily check which containers have a specific item, and how much of it the container has
 - A container typing system that flags containers as either an input for importing items, as a storage container, or as an output for requested items
 - An actively updated model of stored items reduces laggy peripheral calls
 - A filter system that limits what items go into which storage containers based on item name, mod, attribute/tag, or a recursive, complex sequence of other filters
@@ -14,8 +14,7 @@ RASCL is a storage and auto-crafting solution for the CC: Tweaked mod in Minecra
 This project could not be possible without [Basalt2](https://github.com/Pyroxenium/Basalt2/tree/main) by NyoriE. This repo contains a pre-installed version of it that is compatible with my work, but please consider supporting the original project.
 
 ## Installation
-RASCL relies heavily on touch capabilities, and is intended to be run in terminals rather than on monitors.
-To start off your storage network, run the following command in an advanced computer (not an advanced pocket computer):
+To start off your storage network, run the following command in an _advanced_ computer (not an advanced pocket computer):
 
 `wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua`
 
@@ -33,6 +32,10 @@ All storage containers on a network must be hooked up via wired modems. Storage 
 
 ## Limitations
 - The system tries to keep an internal model of the state of each container, but does not periodically check to see if its model is up-to-date with the real contents of the container. If an item is added or removed manually from the container without using input/output containers, the model will not detect it and will no longer be accurate. Until I introduce a background scanning process, please only import items through an input chest, and please only export items by requesting them in the interface.
+- Containers placed directly next to the host computer are intentionally ignored due to the fact that the name of the peripheral differs from those discovered via wired modems.
+- Theoretically, if your storage system is too large, it may be possible for the system to begin behaving unexpectedly. There are a couple algorithms that utilize the event queue which are not controlled or scheduled, so if they run at the same time they may exceed the 256 queue limit and events may be dropped. This should never happen with container content discovery / updating since I do have a scheduling system for that. For example, if you disconnect a huge chunk of the network all at once, the sheer number of peripheral detachment events may exceed 256 and some containers may not register as detached. Please report these problems if you notice them.
+- RASCL relies heavily on touch capabilities, so you'll have a hard time doing anything without advanced computers. However, if you intend to only interact with the storage system via remotes, the host could likely be run on a normal computer.
+- RASCL is intended to be run in terminals with default resolutions rather than on monitors. Still, if you intend to use monitors, the recommended minimum width is the same as the pocket computer, 26. The recommended minimum height is that of the turtle, 13.
 
 ##To-do List
 - Autocrafting, including designating containers as inputs and outputs for external processing recipes
