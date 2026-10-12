@@ -37,7 +37,7 @@ All storage containers on a network must be hooked up via wired modems. Storage 
 - RASCL relies heavily on touch capabilities, so you'll have a hard time doing anything without advanced computers. However, if you intend to only interact with the storage system via remotes, the host could likely be run on a normal computer.
 - RASCL is intended to be run in terminals with default resolutions rather than on monitors. Still, if you intend to use monitors, the recommended minimum width is the same as the pocket computer, 26. The recommended minimum height is that of the turtle, 13.
 
-##To-do List
+## To-do List
 - Autocrafting, including designating containers as inputs and outputs for external processing recipes
 - Calculating fill level percents for individual containers, as well as combined fill level of all chests assigned to a filter
 - Periodically scan containers for unauthorized changes in contents
@@ -47,4 +47,4 @@ All storage containers on a network must be hooked up via wired modems. Storage 
 ## AI Usage and Philosophy
 Two files in the project were AI-generated; `/classes/CSV.lua`, a class that manages CSV files, and the `installer.lua` used to install the program. All others were made by me. I believe that the tasks these two files accomplish are not related to the challenge of developing a storage system program. Any program that needs to store data to disk needs a few repetitive functions for reading and writing data; it's not interesting. Same with installing the program itself. If that's something that bothers you, please don't ask me to re-write them by hand. I still manually reviewed the files and changed them according to my needs; a manual rewrite would just waste my time achieving exactly the same results.
 
-Beyond this, I have utilized AI to identify bugs, but only in circumstances where I have spent several hours attempting to resolve the issue manually and have made an honest effort to narrow down the cause. I have not used AI to implement the solutions to these problems (unless, of course, the solution end up being a simple one-line typo, what can you do about that). In essence, the AI acts as a code reviewing tool that can quickly find small mistakes and also explain deeply-seated bugs that transcend multiple files. If that's something that bothers you... feel free to reach out and let me know.
+Beyond this, I have utilized AI to identify bugs, but only in circumstances where I have spent several hours attempting to resolve the issue manually and have made an honest effort to narrow down the cause. I have not used AI to implement the solutions to these problems (unless, of course, the solution ended up being a simple one-line typo, what can you do about that). In essence, I used AI as a code reviewing tool that can quickly find small mistakes and also explain deeply-seated bugs that transcend multiple classes. If that's something that bothers you, feel free to reach out and let me know.
