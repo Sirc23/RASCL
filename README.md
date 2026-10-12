@@ -18,7 +18,9 @@ To start off your storage network, run the following command in an _advanced com
 
 `wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua`
 
-Follow the prompts to download the files and configure the device. The `hostname` determines the rednet host that all communication is broadcast on; it should be unique to you and anyone you want to have access to your storage. The `device type` determines how the device should function within the network. See below for a list of types; your first installation should use `host`.
+Follow the prompts to download the files and configure the device. The `host name` determines the rednet host that all communication is broadcast on; it should be unique to you and anyone you want to have access to your storage. The `device type` determines how the device should function within the network. See below for a list of types; your first installation should use `host`.
+
+Once you've got the host set up, you can run the install command on any advanced device to add remote clients. Just make sure to use the same host name so that the devices talk to each other.
 
 ## Network Setup
 All computers must have a wireless modem attached; all my development has been done using ender modems.
