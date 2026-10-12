@@ -37,7 +37,7 @@ All storage containers on a network must be hooked up via wired modems. Storage 
 - RASCL relies heavily on touch capabilities, so you'll have a hard time doing anything without advanced computers. However, if you intend to only interact with the storage system via remotes, the host could likely be run on a normal computer.
 - RASCL is intended to be run in terminals with default resolutions rather than on monitors. Still, if you intend to use monitors, the recommended minimum width is the same as the pocket computer, 26. The recommended minimum height is that of the turtle, 13.
 
-##To-do List
+## To-do List
 - Autocrafting, including designating containers as inputs and outputs for external processing recipes
 - Calculating fill level percents for individual containers, as well as combined fill level of all chests assigned to a filter
 - Periodically scan containers for unauthorized changes in contents
