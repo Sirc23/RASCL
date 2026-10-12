@@ -14,7 +14,7 @@ RASCL is a storage and auto-crafting solution for the CC: Tweaked mod in Minecra
 This project could not be possible without [Basalt2](https://github.com/Pyroxenium/Basalt2/tree/main) by NyoriE. This repo contains a pre-installed version of it that is compatible with my work, but please consider supporting the original project.
 
 ## Installation
-To start off your storage network, run the following command in an _advanced_ computer (not an advanced pocket computer):
+To start off your storage network, run the following command in an _advanced computer_ (not an advanced pocket computer):
 
 `wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua`
 
@@ -25,7 +25,7 @@ All computers must have a wireless modem attached; all my development has been d
 
 Computers can be set up with one of three device types:
 - Host: Every network must have exactly one, and it must not be a pocket computer.
-- Remote: These can be any advanced computer, pocket computer, or turtle. Remotes communicate with the host to wirelessly schedule requests, change a container's configuration, or just about anything else that you can do from a host's UI. Without other mods, these computers might not be very useful... but if you have a means of accessing even a single container from a distance, a remote pocket computer can become a way to wirelessly store and retrieve items from your entire storage system.
+- Remote: These can be any advanced computer, advanced pocket computer, or advanced turtle. Remotes communicate with the host to wirelessly schedule requests, change a container's configuration, or just about anything else that you can do from a host's UI. Without other mods, these computers might not be very useful... but if you have a means of accessing even a single container from a distance, a remote pocket computer can become a way to wirelessly store and retrieve items from your entire storage system.
 - Crafter: Currently, crafters do not do anything special since autocrafting is not implemented. These computers must be turtles with a crafting table attached to one side. They communicate with the host to schedule crafting tasks, but can also act like remotes in order to access the network as well. Eventually, you will be able to teach the system crafting recipes through these computers.
 
 All storage containers on a network must be hooked up via wired modems. Storage containers will not be recognized if they are directly adjacent to the host computer. Each container should connect to the network exactly once; if multiple modems are connected to the same container, it will be recognized twice and the item counts will not accurately reflect the true values.
