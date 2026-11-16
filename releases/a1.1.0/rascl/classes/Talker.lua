@@ -58,13 +58,18 @@ rec_isInitialized		= function(packet)
 send_model	= function(packet)
 			if not isHost then validate(nil, packet.instruction) return end
 			
-			local data = {model = master.model}
+			local data = {model = master.model, items = {}}
+			for uniqueKey, thisItem in pairs(master.storage) do
+				data.items[uniqueKey] = thisItem.gid
+			end
 			local newPacket = myTalker:makePacket("rec_model", data)
 			myTalker:sendPacket(newPacket, packet.sender, packet.id)
 		end,
 rec_model	= function(packet)
 			if isHost then validate(nil, packet.instruction) return end
 			validate(packet.data.model, packet.instruction, 1)
+			validate(packet.data.items, packet.instruction, 2)
+			packet.data.model.items = packet.data.items
 			return packet.data.model
 		end,
 send_modCSV			= function(packet)

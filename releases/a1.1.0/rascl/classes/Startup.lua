@@ -857,13 +857,15 @@ function Startup:defineContainers(container)
 	end
 	
 	for index, value in pairs(model) do
-		self.model[index] = value
+		if index ~= "items" then
+			self.model[index] = value
+		end
 	end
 	
 	local totalContainers = #self.containers
 	local completedContainers = 0
 	
-	for uniqueKey, gid in pairs(self.model.items) do
+	for uniqueKey, gid in pairs(model.items) do
 		self.storage[uniqueKey] = Item:new(gid)
 		--asdf("Adding " .. uniqueKey)
 	end

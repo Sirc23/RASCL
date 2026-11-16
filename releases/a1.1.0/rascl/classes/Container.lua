@@ -263,6 +263,7 @@ function Container:exportItemToStorage(uniqueKey, fromSlot, job)
 		gid = item.gid
 	else
 		--Item is brand new, make it
+		gid.nbt = gid.nbt or "0"
 		gid.count = 0
 		gid.containers = {}
 		
