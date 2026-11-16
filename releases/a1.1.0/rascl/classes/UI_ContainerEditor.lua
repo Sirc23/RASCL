@@ -6,7 +6,7 @@ function UI_ContainerEditor:new(container, parentContainer)
 	
 	r.container = container
 	
-	r.foreground = parentContainer:addScrollFrame({
+	r.foreground = parentContainer:addFrame({
 		width = termX - 2,
         height = termY - 1,
         x = 2,

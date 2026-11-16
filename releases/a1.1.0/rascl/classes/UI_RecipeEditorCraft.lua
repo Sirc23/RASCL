@@ -9,7 +9,7 @@ function UI_RecipeEditorCraft:new(recipe, container)
 	r.recipe = recipe
 	
 	
-	r.foreground = container:addScrollFrame({
+	r.foreground = container:addFrame({
 		width = container.width,
         height = container.height,
         x = 1,
