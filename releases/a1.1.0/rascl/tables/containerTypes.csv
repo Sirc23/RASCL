@@ -1,0 +1,8 @@
+name÷storageType÷isActive÷canExportToStorage÷color1÷color2÷displayOrder
+storage÷1÷1÷0÷5÷d÷1
+input÷0÷1÷1÷3÷3÷2
+output÷0÷1÷0÷9÷9÷3
+ignore÷0÷0÷0÷b÷b÷4
+staging÷0÷1÷1÷1÷1÷5
+process-import÷0÷1÷0÷4÷4÷6
+process-export÷0÷1÷1÷4÷4÷7
