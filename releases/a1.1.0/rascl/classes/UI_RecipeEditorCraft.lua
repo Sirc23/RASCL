@@ -1,5 +1,7 @@
 UI_RecipeEditorCraft = {}
 UI_RecipeEditorCraft.__index = UI_RecipeEditorCraft
+UI_RecipeEditorCraft.slots = {1,2,3,5,6,7,9,10,11}
+
 
 NoTurtlesMessage = "No crafting turtles"
 
@@ -132,6 +134,7 @@ function UI_RecipeEditorCraft:initIngredientsTable(container)
 		end
 		self.ui_learn.visible = isValid and canLearn
 		for i = 1,9 do
+			local thisSlot = UI_RecipeEditorCraft.slots[i]
 			local thisBtn = r:addButton({
 				width = container.width,
 				height = 1,
@@ -142,11 +145,11 @@ function UI_RecipeEditorCraft:initIngredientsTable(container)
 				text = "",
 				name = tostring(i)
 			})
-			if inventory[i] then
-				thisBtn.text = inventory[i].displayName .. " (" .. tostring(inventory[i].count) .. ")"
+			if inventory[thisSlot] then
+				thisBtn.text = inventory[thisSlot].displayName .. " (" .. tostring(inventory[thisSlot].count) .. ")"
 				thisBtn.text = thisBtn.text .. string.rep("\128", math.max(0, container.width - #thisBtn.text))
-				thisBtn.item = inventory[i].name
-				if inventory[i].count > 1 then
+				thisBtn.item = inventory[thisSlot].name
+				if inventory[thisSlot].count > 1 then
 					thisBtn.foreground = colors.red
 				end
 			else
@@ -171,9 +174,8 @@ end
 
 function UI_RecipeEditorCraft:getInventory()
 	local inventory = {}
-	local slots = {1,2,3,5,6,7,9,10,11}
 	local functionArray = {}
-	for index, slot in ipairs(slots) do
+	for index, slot in ipairs(UI_RecipeEditorCraft.slots) do
 		local f = function()
 			inventory[slot] = turtle.getItemDetail(slot, true)
 		end
