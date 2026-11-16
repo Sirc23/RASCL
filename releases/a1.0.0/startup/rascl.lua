@@ -1,5 +1,5 @@
-term.clear()
 version = "a1.0.0"
+term.clear()
 config = {}
 root = settings.get("rascl") .. "/"
 --Load config file
