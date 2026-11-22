@@ -5,6 +5,8 @@
 --
 -- Run it with:
 --   wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua
+-- To install a specific release instead of the latest one, add --version:
+--   wget run https://raw.githubusercontent.com/Sirc23/RASCL/main/install.lua --version a1.0.0
 
 term.clear()
 term.setCursorPos(1,1)
@@ -334,9 +336,14 @@ end
 
 -- Writes every downloaded file according to its classification.
 -- `installed` is nil on a fresh install.
-local function applyFiles(installDir, contents, installed, target)
-	local resetSet = collectFiles(resetOnUpgrade, installed, target)
-	local deleteSet = collectFiles(deleteOnUpgrade, installed, target)
+-- `backdate` is true when installing a version older than the installed one: only the code files are replaced, and
+-- configs, resets and deletions are left alone (nothing is reverse-applied). The server protocol is still set to match.
+local function applyFiles(installDir, contents, installed, target, backdate)
+	local resetSet, deleteSet = {}, {}
+	if not backdate then
+		resetSet = collectFiles(resetOnUpgrade, installed, target)
+		deleteSet = collectFiles(deleteOnUpgrade, installed, target)
+	end
 
 	local order = {}
 	for rel in pairs(contents) do
@@ -363,17 +370,21 @@ local function applyFiles(installDir, contents, installed, target)
 	end
 
 	for _, rel in ipairs(order) do
-		writeOne(rel)
-	end
-
-	for rel in pairs(deleteSet) do
-		local dest = destination(installDir, rel)
-		if not contents[rel] and fs.exists(dest) then
-			fs.delete(dest)
+		if not backdate or classify(rel) == "code" then
+			writeOne(rel)
 		end
 	end
 
-	-- The server protocol follows the version: "a1.1.0" -> "rascl-a1_1_0"
+	if not backdate then
+		for rel in pairs(deleteSet) do
+			local dest = destination(installDir, rel)
+			if not contents[rel] and fs.exists(dest) then
+				fs.delete(dest)
+			end
+		end
+	end
+
+	-- The server protocol follows the version, going back as well: "a1.1.0" -> "rascl-a1_1_0"
 	local protocol = "rascl-" .. (target:gsub("%.", "_"))
 	local ok, err = setConfigValue(fs.combine(installDir, SERVER_CONFIG), "server_protocol", protocol)
 	if not ok then error(err, 0) end
@@ -458,7 +469,30 @@ end
 -- Installer
 ------------------------------------------------------------------------
 
-local function main()
+-- Reads the arguments given to the script. Returns the version asked for with --version, or nil.
+local function parseArguments(args)
+	local requested = nil
+	local i = 1
+	while i <= #args do
+		if args[i] == "--version" then
+			requested = args[i + 1]
+			if not requested then
+				error("--version needs a value, for example: --version a1.1.0", 0)
+			end
+			if not requested:match("^[av]%d+%.%d+%.%d+$") then
+				error("'" .. requested .. "' is not a version name (it should look like a1.1.0).", 0)
+			end
+			i = i + 2
+		else
+			error("Unknown argument '" .. tostring(args[i]) .. "'. The only argument is --version <value>.", 0)
+		end
+	end
+	return requested
+end
+
+local function main(...)
+	local requestedVersion = parseArguments({...})
+
 	if not http then
 		error("The HTTP API is disabled, so files can't be downloaded.", 0)
 	end
@@ -496,20 +530,48 @@ local function main()
 	local latest = versions[#versions]
 	print("Latest version: " .. latest.name)
 
+	-- The release to install: the one asked for with --version, otherwise the latest
+	local chosen = latest
+	if requestedVersion then
+		chosen = nil
+		local names = {}
+		for _, entry in ipairs(versions) do
+			names[#names + 1] = entry.name
+			if entry.name == requestedVersion then
+				chosen = entry
+			end
+		end
+		if not chosen then
+			error("There is no release named '" .. requestedVersion .. "'. Available versions: "
+				.. table.concat(names, ", "), 0)
+		end
+		print("Requested version: " .. chosen.name)
+	end
+
+	local backdate = false
 	if isUpgrade then
-		if installed == latest.name then
-			print("Already up to date.")
+		if installed == chosen.name then
+			print("Already on that version.")
 			return
 		end
-		if versionLess(latest.name, installed) then
-			printError("The installed version (" .. installed .. ") is newer than the latest release ("
-				.. latest.name .. "). Nothing was changed.")
-			return
+		if versionLess(chosen.name, installed) then
+			if not requestedVersion then
+				printError("The installed version (" .. installed .. ") is newer than the latest release ("
+					.. latest.name .. "). Nothing was changed.")
+				return
+			end
+			backdate = true
+			printError("Warning: " .. chosen.name .. " is older than the installed version (" .. installed .. ").")
+			printError("Going back to an older version may cause the program to crash.")
+			printError("Only the code files are replaced and the server protocol is set to match;")
+			printError("other configs and data are left as they are, and nothing added or")
+			printError("deleted by newer versions is undone.")
+			sleep(5)
 		end
 	end
 
 	-- 3. Download every file in that version's folder
-	local tree = apiGet(("%s/%s/git/trees/%s?recursive=1"):format(owner, name, latest.sha))
+	local tree = apiGet(("%s/%s/git/trees/%s?recursive=1"):format(owner, name, chosen.sha))
 	if tree.truncated then
 		error("This release has too many files to list in one GitHub request.", 0)
 	end
@@ -521,7 +583,7 @@ local function main()
 	end
 	table.sort(files)
 	if #files == 0 then
-		error("Release " .. latest.name .. " doesn't contain any files.", 0)
+		error("Release " .. chosen.name .. " doesn't contain any files.", 0)
 	end
 
 	local rawBase = ("https://raw.githubusercontent.com/%s/%s/"):format(owner, name)
@@ -530,7 +592,7 @@ local function main()
 	local contents = {}
 	for i, rel in ipairs(files) do
 		print(("[%d/%d] %s"):format(i, #files, rel))
-		local url = rawBase .. encodePath(("%s/%s/%s/%s"):format(branch, releasesFolder, latest.name, rel))
+		local url = rawBase .. encodePath(("%s/%s/%s/%s"):format(branch, releasesFolder, chosen.name, rel))
 		local data, err = httpGet(url, RAW_HEADERS)
 		if not data then
 			error(("Failed to download %s: %s"):format(rel, tostring(err)), 0)
@@ -538,7 +600,7 @@ local function main()
 		contents[rel] = data
 	end
 	print("Download complete. Installing files...")
-	applyFiles(installDir, contents, installed, latest.name)
+	applyFiles(installDir, contents, installed, chosen.name, backdate)
 
 	if not isUpgrade then
 		-- 4. Hostname
@@ -557,9 +619,9 @@ local function main()
 	end
 
 	-- 8. Restart
-	print((isUpgrade and "Upgrade" or "Installation") .. " finished. Rebooting in 3 seconds...")
+	print((backdate and "Backdate" or isUpgrade and "Upgrade" or "Installation") .. " finished. Rebooting in 3 seconds...")
 	sleep(3)
 	os.reboot()
 end
 
-main()
+main(...)
