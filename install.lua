@@ -17,6 +17,9 @@ local releasesFolder = "releases"
 local SERVER_CONFIG = "rascl/tables/server_config.csv"
 local CLIENT_CONFIG = "rascl/tables/client_config.csv"
 
+-- The installed version ("a1.1.0") is kept in this ComputerCraft setting
+local VERSION_SETTING = "rascl.version"
+
 -- The config CSVs use the single byte 0xF7 (the "÷" glyph in ComputerCraft's
 -- character set) as their delimiter. It is NOT UTF-8, so every file is
 -- downloaded, read and written in binary mode to keep it byte-for-byte intact.
@@ -317,10 +320,14 @@ local function findExistingInstall()
 	local installDir = base:sub(1, #base - 6)
 	if installDir == "" then installDir = "/" end
 
-	local version = (readFile("startup/rascl.lua") or ""):match('^%s*version%s*=%s*"([^"]+)"')
-	if not (version and version:match("^[av]%d+%.%d+%.%d+$")) then
-		print("Could not read the installed version; treating it as the oldest.")
-		version = "a0.0.0"
+	local version = settings.get(VERSION_SETTING)
+	if not (type(version) == "string" and version:match("^[av]%d+%.%d+%.%d+$")) then
+		-- Installs from before the version moved into settings carry it on the first line of the startup file
+		version = (readFile("startup/rascl.lua") or ""):match('^%s*version%s*=%s*"([^"]+)"')
+		if not (version and version:match("^[av]%d+%.%d+%.%d+$")) then
+			print("Could not read the installed version; treating it as the oldest.")
+			version = "a0.0.0"
+		end
 	end
 	return installDir, version
 end
@@ -331,12 +338,9 @@ local function applyFiles(installDir, contents, installed, target)
 	local resetSet = collectFiles(resetOnUpgrade, installed, target)
 	local deleteSet = collectFiles(deleteOnUpgrade, installed, target)
 
-	-- startup/rascl.lua carries the version, so it is written last: an
-	-- interrupted upgrade still reads as the old version and can be re-run.
-	local stamp = "startup/rascl.lua"
 	local order = {}
 	for rel in pairs(contents) do
-		if rel ~= stamp then order[#order + 1] = rel end
+		order[#order + 1] = rel
 	end
 	table.sort(order)
 
@@ -369,9 +373,15 @@ local function applyFiles(installDir, contents, installed, target)
 		end
 	end
 
-	if contents[stamp] then
-		writeOne(stamp)
-	end
+	-- The server protocol follows the version: "a1.1.0" -> "rascl-a1_1_0"
+	local protocol = "rascl-" .. (target:gsub("%.", "_"))
+	local ok, err = setConfigValue(fs.combine(installDir, SERVER_CONFIG), "server_protocol", protocol)
+	if not ok then error(err, 0) end
+
+	-- The version is recorded last: an interrupted upgrade still reads as the
+	-- old version and can be re-run.
+	settings.set(VERSION_SETTING, target)
+	settings.save()
 end
 
 ------------------------------------------------------------------------
