@@ -307,7 +307,6 @@ function Item:makeUI(uiManager)
 			background = colors.blue,
 			foreground = colors.white
 		})
-		
 		if master.recipes[self.gid.uniqueKey] and #master.recipes[self.gid.uniqueKey] > 0 then
 			local craftNow = thisItem:addButton({
 				width = 1,
@@ -316,6 +315,7 @@ function Item:makeUI(uiManager)
 				y = 2,
 				z = 10,
 				text = "C",
+				name = "craftNow",
 				background = colors.purple,
 				foreground = colors.black
 			})
@@ -363,7 +363,10 @@ function Item:makeUI(uiManager)
 			local t = tonumber(element.text) - (direction * cartAmount)
 			--Clamp number to bounds
 			t = math.max(0, t)
-			t = math.min(tonumber(config.max_cart_size), element.parent.item.gid.count, t)
+			t = math.min(tonumber(config.max_cart_size), t)
+			if(not element.parent:getChild("craftNow")) then
+				t = math.min(tonumber(config.max_cart_size), element.parent.item.gid.count, t)
+			end
 			element.text = tostring(t)
 		end)
 	
@@ -382,7 +385,10 @@ function Item:makeUI(uiManager)
 			local t = tonumber(element.text)
 			--Clamp number to bounds
 			t = math.max(0, t)
-			t = math.min(tonumber(config.max_cart_size), element.parent.item.gid.count, t)
+			t = math.min(tonumber(config.max_cart_size), t)
+			if(not element.parent:getChild("craftNow")) then
+				t = math.min(tonumber(config.max_cart_size), element.parent.item.gid.count, t)
+			end
 			element.text = tostring(t)
 			element.oldNumber = element.text
 			element.viewOffset = 0
