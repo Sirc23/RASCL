@@ -139,6 +139,7 @@ function Startup:initMainMenu(container)
 	}
 	if debugMode then table.insert(self.menuNodes, {text = "Debug", background = colors.yellow, foreground = colors.black}) end
 	
+	local version = settings.get("rascl.version") or "unknown"
 	local versionLabel = container:addLabel({
 		height = 1,
 		x = math.floor((1 + #version) / 2) + 1,
